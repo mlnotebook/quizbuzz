@@ -1,0 +1,29 @@
+<div style="font-size: 23px; font-weight: bold; margin: auto; width: 100%;">Quizzers</div>
+<table class="table table-hover" style="display: table">
+    {% for logged_in_user in logged_in_users %}
+        <tr style="display: table-row">
+            <td style="width: 25px; height: 35px; display: table-cell; vertical-align: middle;">
+                <div style="margin: auto;">
+                    <img src="{{ logged_in_user.avatar(25) }}}">
+                </div>
+            </td>
+            <td style="width: 90%;  height: 35px; vertical-align: middle; padding-left: 8px;">
+                <div style="display: table-cell; float: left; font-size: 20px; font-weight: bold; color: {% if logged_in_user.username==current_user.username %}lime{% else %}black{% endif %}; ">
+                    {{ logged_in_user.username }}
+                    {% if quiz.quizmaster==logged_in_user.username %} (Quizmaster) {% endif %}
+                </div>
+            </td>
+            <td style="width: 10%;  height: 35px; vertical-align: middle;">
+                {% if current_user.username==quiz.quizmaster and logged_in_user.username!=quiz.quizmaster %}
+                <div style="display: table-cell; float: left;">
+                    <form action="{{ url_for('main.remove_quizzer', username=logged_in_user.username) }}" method="post">
+                        {{ remove_quizzer_form.hidden_tag() }}
+                        {{ remove_quizzer_form.submit(value='Remove', style="height:35px;", class_='btn btn-default') }}
+                    </form>
+                </div>
+                {% endif %}
+            </p>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

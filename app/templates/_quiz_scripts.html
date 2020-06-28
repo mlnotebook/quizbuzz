@@ -1,0 +1,43 @@
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket;
+    $(document).ready(function(){
+        socket = io.connect('http://' + document.domain + ':' + location.port + '/quiz');
+        socket.on('connect', function() {
+            socket.emit('joined', {});
+            $('#chat').val($('#chat').val() + socket.nsp + ' ' + {{ room }} + '\n');
+            $('#buzzer').attr({disabled: true});
+            $('#buzzer').html('Wait!');
+        });
+        socket.on('buzz', function(data) {
+            $('#chat').val($('#chat').val() + data.username  + '\n');
+            $('#buzzer').attr({disabled: true});
+        });
+        socket.on('joined', function(data) {
+            $('#chat').val($('#chat').val() + '<< ' + data.msg + ' >>\n');
+        });
+        socket.on('reset', function() {
+            $('#chat').val('');
+            $('#buzzer').attr({disabled: true});
+            $('#buzzer').html('Wait!');
+        });
+        socket.on('start', function() {
+            $('#chat').val('');
+            $('#buzzer').attr({disabled: false});
+            $('#buzzer').html('Buzz');
+        });
+    });
+    function buzz() {
+        socket.emit('buzz', {});
+        $('#buzzer').attr({disabled: true});
+        $('#buzzer').html('Buzzed!');
+    };
+    function reset() {
+        socket.emit('reset', {});
+    };
+    function start() {
+        socket.emit('start', {});
+    };
+</script>

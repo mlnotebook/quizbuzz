@@ -1,0 +1,2 @@
+FLASK_APP=quizbuzz.py
+FLASK_DEBUG=1

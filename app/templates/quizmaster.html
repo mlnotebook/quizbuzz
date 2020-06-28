@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>Welcome Quizmaster, {{ current_user.username }}!</h1>
+     <div class="center-block">
+        {% include '_quiz_info.html' %}
+    </div>
+    <br>
+    {% if logged_in_users %}
+        {% include '_user_tile.html' %}
+    {% endif %}
+    </div>
+    <div class="center-block">
+        <table class="table table-condensed">
+            <tr>
+                <td>
+                    {% include '_reset.html' %}
+                    <br>
+                    {% include '_round_type_buttons.html' %}
+                </td>
+                <td>
+                    {% include '_user_buzzed_in.html' %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ wtf.quick_form(delete_quiz_form) }}
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {% include '_quiz_scripts.html' %}
+{% endblock %}
