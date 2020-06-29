@@ -33,6 +33,6 @@ It may be necessary to add an 'incoming' rule to the firewall of the host machin
 
 ## Screenshots
 
-<img width="200px" style="margin: 0 auto;" raw=True src="images/quizbuzz-homepage.png"><br>
-<img width="200px" style="margin: 0 auto;" raw=True src="images/quizbuzz-quizmaster.png"><br>
-<img width="200px" style="margin: 0 auto;" raw=True src="images/quizbuzz-player.png">
+<img style="margin: 0 auto; width: 100%;" raw=True src="images/quizbuzz-homepage.png"><br>
+<img style="margin: 0 auto; width: 100%;" raw=True src="images/quizbuzz-quizmaster.png"><br>
+<img style="margin: 0 auto; width: 100%;" raw=True src="images/quizbuzz-player.png">
