@@ -1,0 +1,8 @@
+<div style="font-size: 23px; font-weight: bold; margin: auto; width: 100%;" id="quizzers-div">
+    Quizzers
+<table class="table table-hover" style="display: table" id="quizzers">
+    {% for logged_in_user in logged_in_users %}
+        {% include '_user_tile.html' %}
+    {% endfor %}
+</table>
+</div>

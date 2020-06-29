@@ -5,7 +5,8 @@ from flask_login import current_user, login_required, login_user, logout_user
 from flask import render_template, redirect, url_for, flash, request, session
 from werkzeug.urls import url_parse
 from app.main.forms import JoinQuizForm, LeaveQuizForm, DeleteUsersForm, CreateQuizForm, DeleteQuizForm, EmptyForm
-
+from flask_socketio import emit, join_room, leave_room
+from app import socketio
 
 @bp.before_app_request
 def before_request():
@@ -86,14 +87,12 @@ def quiz():
     room = session.get("QUIZID")
     quiz = Quiz.query.filter_by(id=current_user.quizid).first_or_404()
     logged_in_users = User.query.filter_by(logged_in_status=True, quizid=quiz.id).all()
-    thisuser = current_user.username
     return render_template('quiz.html',
                            title='Quiz',
                            quiz=quiz,
                            leave_quiz_form=leave_quiz_form,
                            logged_in_users=logged_in_users,
-                           room=room,
-                           thisuser=thisuser)
+                           room=room)
 
 
 @bp.route('/quizmaster', methods=['GET', 'POST'])
@@ -120,27 +119,21 @@ def quizmaster():
     room = session.get("QUIZID")
     quiz = Quiz.query.filter_by(id=current_user.quizid).first_or_404()
     logged_in_users = User.query.filter_by(logged_in_status=True, quizid=quiz.id).all()
-    thisuser = current_user.username
     return render_template('quizmaster.html',
                            title='Quizmaster',
                            delete_quiz_form=delete_quiz_form,
                            logged_in_users=logged_in_users,
                            remove_quizzer_form=remove_quizzer_form,
                            quiz=quiz,
-                           room=room,
-                           thisuser=thisuser)
+                           room=room)
 
 
-@bp.route('/remove_quizzer/<username>', methods=['GET', 'POST'])
+@bp.route('/remove_user/<username>', methods=['GET', 'POST'])
 @login_required
-def remove_quizzer(username):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        logout_user(user)
-        db.session.delete(user)
-        db.session.commit()
-        flash('User Removed')
-        return redirect(url_for('main.quizmaster'))
-    else:
-        return redirect(url_for('main.index'))
+def remove_user(username):
+    quizid = session.get('QUIZID')
+    quiz = Quiz.query.filter_by(id=quizid).first_or_404()
+    quizmaster = User.query.filter_by(username=quiz.quizmaster).first_or_404()
+
+    emit('remove_quizzer', {'username': username}, room=quizmaster.session_id)
+

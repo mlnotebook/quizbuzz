@@ -8,6 +8,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     logged_in_status = db.Column(db.Boolean, index=False, unique=False)
     quizid = db.Column(db.Integer, index=False, unique=False)
+    session_id = db.Column(db.Integer, index=False, unique=True)
 
     def __repr__(self):
         return '<User {}, quizid {}>'.format(self.username, self.quizid)
