@@ -1,22 +1,23 @@
-<tr style="display: table-row" id="{{ logged_in_user.username }}_tile">
-    <td style="width: 25px; height: 35px; display: table-cell; vertical-align: middle;">
+<tr style="display: table-row; height: 40px;" id="{{ logged_in_user.username }}_tile">
+    <td style="width: 35px; display: table-cell; padding: 2px; vertical-align: middle;">
         <div style="margin: auto;">
             <img src="{{ logged_in_user.avatar(25) }}}">
         </div>
     </td>
-    <td style="width: 90%;  height: 35px; vertical-align: middle; padding-left: 8px;">
-        <div style="display: table-cell; float: left; font-size: 20px; font-weight: bold; color: {% if logged_in_user.username == current_user.username %}lime{% else %}black{% endif %}; ">
-            {{ logged_in_user.username }}
-            {% if quiz.quizmaster==logged_in_user.username %} (Quizmaster) {% endif %}
+    <td style="width: 90%; display: table-cell; padding: 2px; vertical-align: middle; padding-left: 8px;">
+        <div style="display: table-cell; float: left;">
+            <p style="font-size: 18px; display: table-cell; font-weight: normal; color: {% if logged_in_user.username == current_user.username %}lime{% else %}black{% endif %};">
+                {{ logged_in_user.username }}
+                {% if quiz.quizmaster==logged_in_user.username %} (Quizmaster) {% endif %}
+            </p>
         </div>
     </td>
-    <td style="width: 10%;  height: 35px; vertical-align: middle;">
+    <td style="width: 10%; display: table-cell; padding: 2px; vertical-align: middle;">
         {% if current_user.username==quiz.quizmaster and logged_in_user.username!=quiz.quizmaster %}
         <div style="display: table-cell; float: left;">
-            <form>
-                {{ remove_quizzer_form.hidden_tag() }}
-                {{ remove_quizzer_form.submit(value='Remove', onclick=("remove_user('%s')" | format(logged_in_user.username)), style="height:35px;", class_='btn btn-default') }}
-            </form>
+             <button class='btn' style="width: 100%; height: 35px;"
+                     type="button" id="remove_user_{{ logged_in_user.username }}"
+                     onclick="remove_user('{{ logged_in_user.username }}')">Remove</button>
         </div>
         {% endif %}
     </p>

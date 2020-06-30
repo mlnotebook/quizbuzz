@@ -1,8 +1,13 @@
 <div style="margin: 0 auto; width: 100%;">
-    <textarea style="resize: none; font-size: 20pt; width: 100%; text-align-last: left; padding-left: 25px;"
-              id="chat"
-              rows="10"
-              placeholder=""
-              disabled>
-    </textarea>
+ <form>
+    {{ user_buzzed_in_form.hidden_tag() }}
+    {{ user_buzzed_in_form.buzzed_in_area(
+        style="width: 100%;
+        resize: none;
+        height: 250px;
+        padding-left: 25px;
+        font-size: 20pt;") }}
+</form>
 </div>
+
+

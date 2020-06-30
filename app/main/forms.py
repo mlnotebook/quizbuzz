@@ -33,9 +33,8 @@ class CreateQuizForm(FlaskForm):
             raise ValidationError('Please use a different username.')
 
 
-class BuzzerForm(FlaskForm):
-    """The buzzer button."""
-    buzzSubmit = SubmitField('Buzz')
+class UserBuzzerInForm(FlaskForm):
+    """Area to show the users that buzzed."""
     buzzed_in_area = TextAreaField('', id="chat")
 
 
@@ -52,6 +51,11 @@ class DeleteQuizForm(FlaskForm):
 class DeleteUsersForm(FlaskForm):
     """Delete all users and quizzes from the db."""
     deleteUsersSubmit = SubmitField('Delete All Users')
+
+
+class FastestFingerForm(FlaskForm):
+    """Start Fastest Finger First Round."""
+    fastestFingerSubmit = SubmitField('FastestFinger')
 
 
 class EmptyForm(FlaskForm):

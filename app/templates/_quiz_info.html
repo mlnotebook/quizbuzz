@@ -1,7 +1,16 @@
 <table style="font-size: 20px; padding: 0; width: 100%;" class="table table-condensed">
-    <tr>
-        <td><strong>Quiz Name:</strong><br>{{ quiz.quizname }}</td>
-        <td><strong>Quiz ID:</strong><br>{{ room }}</td>
-        <td><strong>Quizmaster:</strong><br>{{quiz.quizmaster}}</td>
+    <tr style="display: table-row; height: 40px;">
+        <td style="width: 33%; display: table-cell; padding: 2px; vertical-align: middle;">
+            <p style="font-size: 18px; display: table-cell; font-weight: bold;">Quiz Name: </p>
+            <p style="font-weight: normal;">{{ quiz.quizname }}</p>
+        </td>
+        <td style="width: 33%; display: table-cell; padding: 2px; vertical-align: middle;">
+            <p style="font-size: 18px; display: table-cell; font-weight: bold;">Quiz ID: </p>
+            <p style="font-weight: normal;">{{ room }}</p>
+        </td>
+        <td style="width: 33%; display: table-cell; padding: 2px; vertical-align: middle;">
+            <p style="font-size: 18px; display: table-cell; font-weight: bold;">Quizmaster: </p>
+            <p style="font-weight: normal;">{{quiz.quizmaster}}</p>
+        </td>
     </tr>
 </table>

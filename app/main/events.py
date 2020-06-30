@@ -7,7 +7,7 @@ from .. import socketio, db
 
 
 @socketio.on('joined', namespace='/quiz')
-def joined():
+def joined(message):
     """When a user joins (or reconnects) to the session.
 
     Gets the session id of the new user from the request.
@@ -47,7 +47,7 @@ def add_quizzer(message):
 
 
 @socketio.on('buzz', namespace='/quiz')
-def buzz():
+def buzz(message):
     """When a user presses the buzzer."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
@@ -55,7 +55,7 @@ def buzz():
 
 
 @socketio.on('reset', namespace='/quiz')
-def reset():
+def reset(message):
     """When the quizmaster resets the quiz."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
@@ -63,7 +63,7 @@ def reset():
 
 
 @socketio.on('start', namespace='/quiz')
-def start():
+def start(message):
     """When the quizmaster starts the round."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
@@ -71,7 +71,7 @@ def start():
 
 
 @socketio.on('left', namespace='/quiz')
-def left():
+def left(message):
     """When a quizzer leaves the quiz."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")

@@ -11,6 +11,7 @@
             $('#chat').val('');
             $('#buzzer').attr({disabled: true});
             $('#buzzer').html('Wait!');
+            $('#chat').attr({disabled: 'disabled'});
         });
         socket.on('buzz', function(data) {
             var buzz_time = Date.now();
@@ -29,7 +30,7 @@
          });
         socket.on('reset', function() {
             $('#chat').val('');
-            $('#buzzer').attr({disabled: true});
+            $('#buzzer').attr({disabled: 'disabled'});
             $('#buzzer').html('Wait!');
         });
         socket.on('start', function() {
@@ -58,7 +59,6 @@
         socket.emit('start', {});
     };
     function remove_user(username) {
-        $("#" + username + "_tile").remove();
         socket.emit('remove_user', {'username': username});
     };
 </script>

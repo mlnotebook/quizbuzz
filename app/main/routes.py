@@ -4,7 +4,7 @@ from app.models import User, Quiz
 from flask_login import current_user, login_required, login_user
 from flask import render_template, redirect, url_for, flash, request, session
 from werkzeug.urls import url_parse
-from app.main.forms import JoinQuizForm, LeaveQuizForm, DeleteUsersForm, CreateQuizForm, DeleteQuizForm, EmptyForm
+from app.main.forms import JoinQuizForm, LeaveQuizForm, DeleteUsersForm, CreateQuizForm, DeleteQuizForm, UserBuzzerInForm
 from flask_socketio import emit
 
 
@@ -86,6 +86,7 @@ def quiz():
     Leave button removes lets quizzers remove self from db and quiz.
     """
     leave_quiz_form = LeaveQuizForm()
+    user_buzzed_in_form = UserBuzzerInForm()
 
     if leave_quiz_form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first_or_404()
@@ -102,7 +103,8 @@ def quiz():
                            quiz=quiz,
                            leave_quiz_form=leave_quiz_form,
                            logged_in_users=logged_in_users,
-                           room=room)
+                           room=room,
+                           user_buzzed_in_form=user_buzzed_in_form)
 
 
 @bp.route('/quizmaster', methods=['GET', 'POST'])
@@ -119,7 +121,7 @@ def quizmaster():
         return redirect(url_for('main.index'))
 
     delete_quiz_form = DeleteQuizForm()
-    remove_quizzer_form = EmptyForm()
+    user_buzzed_in_form = UserBuzzerInForm()
 
     if delete_quiz_form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first_or_404()
@@ -137,9 +139,10 @@ def quizmaster():
                            title='Quizmaster',
                            delete_quiz_form=delete_quiz_form,
                            logged_in_users=logged_in_users,
-                           remove_quizzer_form=remove_quizzer_form,
                            quiz=quiz,
-                           room=room)
+                           room=room,
+                           user_buzzed_in_form=user_buzzed_in_form
+                           )
 
 
 @bp.route('/remove_user/<username>', methods=['GET', 'POST'])

@@ -3,33 +3,25 @@
 
 {% block app_content %}
     <h1>Welcome, {% if current_user.username==quiz.quizmaster %}Quizmaster {% endif %}{{ current_user.username }}!</h1>
-    <div class="center-block">
+    <div class="center-block" >
         {% include '_quiz_info.html' %}
     </div>
-    <br>
     {% if logged_in_users %}
         {% include '_quizzers.html' %}
     {% endif %}
     </div>
-    <div class="center-block">
+    <div class="center-block" style="width:80%;">
         <table class="table table-condensed">
             <tr>
                 <td>
-                    {% if current_user.username==quiz.quizmaster %}
-                        {% include '_reset.html' %}
-                    {% else %}
-                        {% include '_buzzer.html' %}
-                    {% endif %}
+                    {% include '_buzzer.html' %}
+                    <br>
                     {% include '_user_buzzed_in.html' %}
                 </td>
             </tr>
             <tr>
                 <td>
-                    {% if current_user.username==quiz.quizmaster %}
-                       {{ wtf.quick_form(delete_quiz_form) }}
-                    {% else %}
-                        {{ wtf.quick_form(leave_quiz_form) }}
-                    {% endif %}
+                    {{ wtf.quick_form(leave_quiz_form) }}
                 </td>
                 <td></td>
             </tr>
