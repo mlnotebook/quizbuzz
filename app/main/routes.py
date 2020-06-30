@@ -1,12 +1,12 @@
-from app import db, socketio
+from app import db
 from app.main import bp
 from app.models import User, Quiz
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user
 from flask import render_template, redirect, url_for, flash, request, session
 from werkzeug.urls import url_parse
 from app.main.forms import JoinQuizForm, LeaveQuizForm, DeleteUsersForm, CreateQuizForm, DeleteQuizForm, EmptyForm
-from flask_socketio import emit, join_room, leave_room
-from app import socketio
+from flask_socketio import emit
+
 
 @bp.before_app_request
 def before_request():
@@ -16,6 +16,12 @@ def before_request():
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
+    """Renders the homepage.
+
+    Creates a quizzer or quizmaster. Adds them to the db.
+    Sets the username and quizid of the user in the session.
+    Button to delete all users and quizzes from the db.
+    """
     join_form = JoinQuizForm()
     delete_users_form = DeleteUsersForm()
     create_form = CreateQuizForm()
@@ -75,6 +81,10 @@ def index():
 @bp.route('/quiz', methods=['GET', 'POST'])
 @login_required
 def quiz():
+    """Renders page for the quizzers.
+
+    Leave button removes lets quizzers remove self from db and quiz.
+    """
     leave_quiz_form = LeaveQuizForm()
 
     if leave_quiz_form.validate_on_submit():
@@ -98,6 +108,10 @@ def quiz():
 @bp.route('/quizmaster', methods=['GET', 'POST'])
 @login_required
 def quizmaster():
+    """Renders page for the quizmaster.
+
+    Delete quiz button removes the quiz from db.
+    """
     quiz = Quiz.query.filter_by(id=current_user.quizid).first_or_404()
 
     if current_user.username != quiz.quizmaster:
@@ -131,9 +145,9 @@ def quizmaster():
 @bp.route('/remove_user/<username>', methods=['GET', 'POST'])
 @login_required
 def remove_user(username):
+    """Emits request to remove user from the quiz."""
     quizid = session.get('QUIZID')
     quiz = Quiz.query.filter_by(id=quizid).first_or_404()
     quizmaster = User.query.filter_by(username=quiz.quizmaster).first_or_404()
 
     emit('remove_quizzer', {'username': username}, room=quizmaster.session_id)
-

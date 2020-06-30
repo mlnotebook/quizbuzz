@@ -7,19 +7,31 @@ from .. import socketio, db
 
 
 @socketio.on('joined', namespace='/quiz')
-def joined(message):
+def joined():
+    """When a user joins (or reconnects) to the session.
+
+    Gets the session id of the new user from the request.
+    Adds the session id to the user's db entry.
+    Emits notification to everyone in the room except the new user.
+    """
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         new_user_sessionid = request.sid
         user = User.query.filter_by(username=current_user.username).first_or_404()
-        user.session_id=new_user_sessionid
+        user.session_id = new_user_sessionid
         db.session.commit()
         join_room(room)
-        emit('joined', {'new_user': session.get("USERNAME"), 'new_user_sessionid': new_user_sessionid}, room=room, broadcast=True, include_self=False)
+        emit('joined', {'new_user': session.get("USERNAME"), 'new_user_sessionid': new_user_sessionid}, room=room,
+             broadcast=True, include_self=False)
 
 
 @socketio.on('add_quizzer', namespace='/quiz')
 def add_quizzer(message):
+    """When a quizzer is added every other user requests this.
+
+    Render the new user tile (which adds 'remove' button if quizmaster).
+    Sends the user tile back to each individual user (except new user).
+    """
     if current_user.is_authenticated:
         remove_quizzer_form = EmptyForm()
         quiz = Quiz.query.filter_by(id=current_user.quizid).first_or_404()
@@ -30,32 +42,37 @@ def add_quizzer(message):
                                    quiz=quiz)
         new_user_sessionid = message['new_user_sessionid']
         this_session_id = request.sid
-        emit('add_quizzer', {'quizzers': quizzers, 'new_user': message['new_user']}, room=this_session_id, skip_sid=new_user_sessionid)
+        emit('add_quizzer', {'quizzers': quizzers, 'new_user': message['new_user']}, room=this_session_id,
+             skip_sid=new_user_sessionid)
 
 
 @socketio.on('buzz', namespace='/quiz')
-def buzz(message):
+def buzz():
+    """When a user presses the buzzer."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         emit('buzz', {'username': f'{session.get("USERNAME")}'}, room=room)
 
 
 @socketio.on('reset', namespace='/quiz')
-def reset(message):
+def reset():
+    """When the quizmaster resets the quiz."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         emit('reset', {}, room=room)
 
 
 @socketio.on('start', namespace='/quiz')
-def start(message):
+def start():
+    """When the quizmaster starts the round."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         emit('start', {}, room=room)
 
 
 @socketio.on('left', namespace='/quiz')
-def left(message):
+def left():
+    """When a quizzer leaves the quiz."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         leave_room(room)
@@ -65,6 +82,12 @@ def left(message):
 
 @socketio.on('remove_user', namespace='/quiz')
 def remove_user(message):
+    """When the quizmaster removes a quizzer.
+
+    Find that user and delete them from the db.
+    Emit request to send that user back to the homepage.
+    Emit request to remove user from the quizzers list.
+    """
     if current_user.is_authenticated:
         room = session.get('QUIZID')
         user = User.query.filter_by(username=message['username']).first()
