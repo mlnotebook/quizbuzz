@@ -23,7 +23,6 @@ def index():
     Button to delete all users and quizzes from the db.
     """
     join_form = JoinQuizForm()
-    delete_users_form = DeleteUsersForm()
     create_form = CreateQuizForm()
 
     if join_form.joinSubmit.data and join_form.validate():
@@ -61,6 +60,17 @@ def index():
             next_page = url_for('main.quizmaster')
         return redirect(next_page)
 
+    return render_template('index.html',
+                           title='Home',
+                           join_form=join_form,
+                           create_form=create_form)
+
+
+@bp.route('/delete_all_users', methods=['GET', 'POST'])
+def delete_all_users():
+    """Renders the delete all users page."""
+    delete_users_form = DeleteUsersForm()
+
     if delete_users_form.deleteUsersSubmit.data and delete_users_form.validate():
         try:
             num_users_deleted = db.session.query(User).delete()
@@ -71,11 +81,7 @@ def index():
         except:
             db.session.rollback()
         return redirect(url_for('main.index'))
-    return render_template('index.html',
-                           title='Home',
-                           join_form=join_form,
-                           delete_users_form=delete_users_form,
-                           create_form=create_form)
+    return render_template('_delete_all_users.html', delete_users_form=delete_users_form)
 
 
 @bp.route('/quiz', methods=['GET', 'POST'])
