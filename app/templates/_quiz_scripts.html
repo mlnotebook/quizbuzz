@@ -49,11 +49,14 @@
             window.location.replace("{{ url_for('main.index') }}");
         });
         socket.on('remove_quizzer', function(data) {
-            $('#chat').val($('#chat').val() + '<< ' + data.username + ' was removed >>\n');
+            $('#chat').val($('#chat').val() + '<< ' + data.username + ' left >>\n');
             $("#" + data.username + "_tile").remove();
         });
         socket.on('buzzed_quizmaster', function(data) {
             $('#chat').val($('#chat').val() + data.username + ': ' + data.answer + '\t(' + data.timedelta + ' s)' + '\n');
+        });
+        $(window).unload(function(){
+          socket.emit('remove_user', {'username': "{{ current_user.username }}"});
         });
     });
     function buzz() {

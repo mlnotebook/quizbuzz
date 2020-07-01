@@ -90,14 +90,16 @@ def start_type_answer(message):
         emit('start_type_answer', {}, room=room)
 
 
-@socketio.on('left', namespace='/quiz')
-def left(message):
+@socketio.on('user_left', namespace='/quiz')
+def user_left(message):
     """When a quizzer leaves the quiz."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
         leave_room(room)
-        msg = session.get("USERNAME") + ' left the room!!'
-        emit('status', {'msg': msg}, room=room)
+        user = User.query.filter_by(username=message['username']).first()
+        db.session.delete(user)
+        db.session.commit()
+        emit('remove_quizzer', {'username': message['username']}, room=room)
 
 
 @socketio.on('remove_user', namespace='/quiz')
