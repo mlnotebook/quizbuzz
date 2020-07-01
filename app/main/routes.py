@@ -154,3 +154,17 @@ def remove_user(username):
     quizmaster = User.query.filter_by(username=quiz.quizmaster).first_or_404()
 
     emit('remove_quizzer', {'username': username}, room=quizmaster.session_id)
+
+
+@bp.route('/_type_answer', methods=['GET', 'POST'])
+@login_required
+def _type_answer():
+    """Renders the type answer question div."""
+    return render_template('_type_answer.html')
+
+
+@bp.route('/_buzzer', methods=['GET', 'POST'])
+@login_required
+def _buzzer():
+    """Renders the buzzer question div."""
+    return render_template('_buzzer.html')

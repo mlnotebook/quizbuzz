@@ -51,7 +51,19 @@ def buzz(message):
     """When a user presses the buzzer."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
-        emit('buzz', {'username': f'{session.get("USERNAME")}'}, room=room)
+        emit('buzz', {'username': f'{session.get("USERNAME")}', 'timedelta': message['timedelta']}, room=room)
+
+
+@socketio.on('type_buzz', namespace='/quiz')
+def type_buzz(message):
+    """When a user sends their answer."""
+    if current_user.is_authenticated:
+        room = session.get("QUIZID")
+        quiz = Quiz.query.filter_by(id=room).first_or_404()
+        quizmaster_user = User.query.filter_by(username=quiz.quizmaster).first_or_404()
+        quizmaster_session = quizmaster_user.session_id
+        emit('buzz', {'username': f'{session.get("USERNAME")}', 'timedelta': message['timedelta']}, room=room, skip_sid=quizmaster_session)
+        emit('buzzed_quizmaster', {'username': f'{session.get("USERNAME")}', 'timedelta': message['timedelta'], 'answer': message['answer']}, room=quizmaster_session)
 
 
 @socketio.on('reset', namespace='/quiz')
@@ -62,12 +74,20 @@ def reset(message):
         emit('reset', {}, room=room)
 
 
-@socketio.on('start', namespace='/quiz')
-def start(message):
-    """When the quizmaster starts the round."""
+@socketio.on('start_fastest_finger', namespace='/quiz')
+def start_fastest_finger(message):
+    """When the quizmaster starts fastest finger round."""
     if current_user.is_authenticated:
         room = session.get("QUIZID")
-        emit('start', {}, room=room)
+        emit('start_fastest_finger', {}, room=room)
+
+
+@socketio.on('start_type_answer', namespace='/quiz')
+def start_type_answer(message):
+    """When the quizmaster starts type answer round."""
+    if current_user.is_authenticated:
+        room = session.get("QUIZID")
+        emit('start_type_answer', {}, room=room)
 
 
 @socketio.on('left', namespace='/quiz')

@@ -6,17 +6,21 @@
     <div class="center-block" >
         {% include '_quiz_info.html' %}
     </div>
+    <div class="center-block" >
     {% if logged_in_users %}
         {% include '_quizzers.html' %}
     {% endif %}
     </div>
-    <div class="center-block" style="width:80%;">
+    <div class="center-block">
         <table class="table table-condensed">
+            <tr id="buzzer_area">
+                {% include '_buzzer.html' %}
+            </tr>
             <tr>
                 <td>
-                    {% include '_buzzer.html' %}
-                    <br>
+                    <div id="buzzed_in_area">
                     {% include '_user_buzzed_in.html' %}
+                    </div>
                 </td>
             </tr>
             <tr>

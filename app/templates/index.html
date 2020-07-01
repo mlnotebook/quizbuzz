@@ -2,28 +2,22 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Welcome to QuizBuzz!</h1>
-
-    <div class="center-block">
-        <table class="table">
-            <tr>
-                <td>
-                    <h2>Join Quiz.</h2>
-                    {{ wtf.quick_form(join_form) }}
-                </td>
-                <td>
-                    <h2>Create Quiz.</h2>
-                    {{ wtf.quick_form(create_form) }}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <br>
-                    {{ wtf.quick_form(delete_users_form) }}
-                </td>
-                <td></td>
-            </tr>
-        </table>
+    <div class="center-block" style="vertical-align: middle; text-align: center;">
+        <img style="width:100px"; src="{{ url_for('static', filename='logo_250.png') }}">
+        <br>
+        <h1>QuizBuzz!</h1>
     </div>
+    <hr style="padding: 0px; margin: 0px;">
+    <div class="center-block" style="vertical-align: middle;">
+        <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
+            <h3>Join Quiz</h3>
+            {{ wtf.quick_form(join_form) }}
+        </div>
+        <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
+            <h3>Create Quiz</h3>
+            {{ wtf.quick_form(create_form) }}
+        </div>
+    </div>
+                    {{ wtf.quick_form(delete_users_form) }}
 
 {% endblock %}

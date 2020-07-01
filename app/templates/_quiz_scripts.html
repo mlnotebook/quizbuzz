@@ -14,10 +14,7 @@
             $('#chat').attr({disabled: 'disabled'});
         });
         socket.on('buzz', function(data) {
-            var buzz_time = Date.now();
-            var timedelta = ((buzz_time - start_time)/1000).toString()
-            $('#chat').val($('#chat').val() + data.username  + '\t\t(' + timedelta + ' s)' + '\n');
-            //$('#buzzer').attr({disabled: true});
+            $('#chat').val($('#chat').val() + data.username  + '\t\t(' + data.timedelta + ' s)' + '\n');
         });
         socket.on('joined', function(data) {
             if($("#" + data.new_user + "_tile").length == 0) {
@@ -26,17 +23,26 @@
             $('#chat').val($('#chat').val() + '<< ' + data.new_user + ' has joined! >>\n');
         });
          socket.on('add_quizzer', function(data) {
-                 $('#quizzers').append(data.quizzers);
+             $('#quizzers').append(data.quizzers);
          });
         socket.on('reset', function() {
             $('#chat').val('');
             $('#buzzer').attr({disabled: 'disabled'});
+            $('#answer').attr({disabled: 'disabled'});
             $('#buzzer').html('Wait!');
         });
-        socket.on('start', function() {
+        socket.on('start_fastest_finger', function() {
+            $('#buzzer_area').load("{{ url_for('main._buzzer') }}");
             $('#chat').val('');
             $('#buzzer').attr({disabled: false});
             $('#buzzer').html('Buzz')
+            start_time = Date.now();
+        });
+        socket.on('start_type_answer', function() {
+            $('#buzzer_area').load("{{ url_for('main._type_answer') }}");
+            $('#chat').val('');
+            $('#buzzer').attr({disabled: false});
+            $('#buzzer').html('Send')
             start_time = Date.now();
         });
         socket.on('remove_user', function(data) {
@@ -46,17 +52,40 @@
             $('#chat').val($('#chat').val() + '<< ' + data.username + ' was removed >>\n');
             $("#" + data.username + "_tile").remove();
         });
+        socket.on('buzzed_quizmaster', function(data) {
+            $('#chat').val($('#chat').val() + data.username + ': ' + data.answer + '\t(' + data.timedelta + ' s)' + '\n');
+        });
     });
     function buzz() {
-        socket.emit('buzz', {});
+        var buzz_time = Date.now();
+        var timedelta = ((buzz_time - start_time)/1000).toString()
+
+        socket.emit('buzz', {'timedelta': timedelta});
         $('#buzzer').attr({disabled: true});
         $('#buzzer').html('Buzzed!');
     };
+    function type_buzz() {
+        var buzz_time = Date.now();
+        var timedelta = ((buzz_time - start_time)/1000).toString()
+        var answer = $('#answer').val()
+        socket.emit('type_buzz', {'answer': answer, 'timedelta': timedelta});
+        $('#buzzer').attr({disabled: true});
+        $('#answer').attr({disabled: true});
+        $('#buzzer').html('Sent!');
+    };
+    $('#answer').keypress(function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+        }
+    });
     function reset() {
         socket.emit('reset', {});
     };
-    function start() {
-        socket.emit('start', {});
+    function start_fastest_finger() {
+        socket.emit('start_fastest_finger', {});
+    };
+    function start_type_answer() {
+        socket.emit('start_type_answer', {});
     };
     function remove_user(username) {
         socket.emit('remove_user', {'username': username});
