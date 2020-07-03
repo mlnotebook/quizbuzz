@@ -1,0 +1,24 @@
+<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket;
+    var start_time;
+    $(document).ready(function(){
+        $("#joinFormButton").click(function() {
+            if ($("#joinFormDiv").css('display') == 'none') {
+                $("#createFormDiv").slideToggle('slow');
+                $("#joinFormDiv").slideToggle('slow');
+                $("#joinFormButton").css('box-shadow', "inset 0px 0px 5px #c1c1c1");
+                $("#createFormButton").css('box-shadow', "inset 0px 0px 0px #c1c1c1");
+            }
+        });
+        $("#createFormButton").click(function() {
+            if ($("#createFormDiv").css('display') == 'none') {
+                $("#joinFormDiv").slideToggle('slow');
+                $("#createFormDiv").slideToggle('slow');
+                $("#createFormButton").css('box-shadow', "inset 0px 0px 5px #c1c1c1");
+                $("#joinFormButton").css('box-shadow', "inset 0px 0px 0px #c1c1c1");
+            }
+        });
+    });
+</script>
