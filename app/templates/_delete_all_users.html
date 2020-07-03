@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<div class ="text-left" style="width:50%; margin: auto; float: left; padding: 2px;">
+    <h3> Admin! </h3>
+    <hr>
+    {{ wtf.quick_form(delete_users_form) }}
+</div>
+
+
+{% endblock %}

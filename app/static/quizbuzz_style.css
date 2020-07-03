@@ -1,0 +1,13 @@
+button.buzzer {
+    background-color: darkblue;
+    color: white;
+}
+
+button.round_type {
+    background-color: darkblue;
+    color: white;
+}
+
+button.quizbutton {
+    box-shadow: 2px 2px 4px 1px #888888;
+}
