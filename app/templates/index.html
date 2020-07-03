@@ -2,30 +2,53 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <div class="center-block" style="vertical-align: middle; text-align: center; max-width: 300px; ">
-        <img style="width:100px"; src="{{ url_for('static', filename='logo_250.png') }}">
-        <br>
-        <h1>QuizBuzz!</h1>
-    </div>
-    <hr style="padding: 0px; margin: auto; width: 300px;">
-    <div class="center-block" style="vertical-align: middle; max-width: 300px; ">
-        <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
-            <button id="joinFormButton" class="btn" style="width: 100%; margin: auto; box-shadow: inset 0px 0px 5px #c1c1c1;">Join</button>
+<div id="home_container"
+     style="position: absolute;
+     margin: auto;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+     width: 350px;
+     height: 500px;
+     background-color: white;">
+    <div class="center-block" style="position: relative; top: 10%;">
+        <div class="center-block" style="vertical-align: middle; text-align: center; max-width: 300px; ">
+            <img style="width:100px"; src="{{ url_for('static', filename='logo_250.png') }}">
+            <br>
+            <h1>QuizBuzz!</h1>
         </div>
-        <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
-            <button id="createFormButton" class="btn" style="width: 100%; margin: auto;">Create</button>
-        </div>
-        <br>
-        <div class="text-left"  style="width:100%;margin: auto; float: left; padding: 2px; box-shadow: inset 0px 0px 0px #c1c1c1;" id="create_or_join_div">
-            <div id="joinFormDiv">
-                {{ wtf.quick_form(join_form) }}
+    <!--    <hr style="padding: 0px; margin: auto; width: 300px;">-->
+        <div class="center-block" style="vertical-align: middle; max-width: 300px; ">
+            <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
+                <button id="joinFormButton" class="btn" style="width: 100%; margin: auto; box-shadow: inset 0px 0px 5px #c1c1c1;">Join</button>
             </div>
-            <div id="createFormDiv" style="display: none;">
-                {{ wtf.quick_form(create_form) }}
+            <div class="text-left" style="width:49%; margin: auto; float: left; padding: 2px;">
+                <button id="createFormButton" class="btn" style="width: 100%; margin: auto;">Create</button>
             </div>
+            <br>
+            <div class="text-left"  style="width:100%;margin: auto; float: left; padding: 2px; box-shadow: inset 0px 0px 0px #c1c1c1;" id="create_or_join_div">
+                <div id="joinFormDiv" class="form-group">
+                    <form action="" method="post" class="form" role="form">
+                        {{ join_form.csrf_token() }}
+                        {{ wtf.form_field(join_form.username, class='form-control', placeholder='Username') }}
+                        {{ wtf.form_field(join_form.quizid, class='form-control', placeholder='Quiz ID') }}
+                        {{ wtf.form_field(join_form.joinSubmit, class='btn') }}
+                    </form>
+                </div>
+                <div id="createFormDiv" style="display: none;"  class="form-group">
+                    <form action="" method="post" class="form" role="form">
+                        {{ create_form.csrf_token() }}
+                        {{ wtf.form_field(create_form.username, class='form-control', placeholder='Username') }}
+                        {{ wtf.form_field(create_form.quizname, class='form-control', placeholder='Quiz Name') }}
+                        {{ wtf.form_field(create_form.createSubmit, class='btn') }}
+                    </form>
+                </div>
+            </div>
+            <div class = "log"></div>
         </div>
-        <div class = "log"></div>
     </div>
+</div>
 
 {% endblock %}
 {% block scripts %}

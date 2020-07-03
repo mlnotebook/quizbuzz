@@ -5,6 +5,7 @@
     var socket;
     var start_time;
     $(document).ready(function(){
+        $('body').css("background-color", "white");
         socket = io.connect('http://' + document.domain + ':' + location.port + '/quiz');
         socket.on('connect', function() {
             socket.emit('joined', {});

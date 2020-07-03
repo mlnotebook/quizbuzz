@@ -11,3 +11,11 @@ button.round_type {
 button.quizbutton {
     box-shadow: 2px 2px 4px 1px #888888;
 }
+
+body {
+    background-color: skyblue;
+}
+
+.btn {
+    width: 100%;
+}
