@@ -12,13 +12,21 @@ It is recommended to create a new python virtual environment and install the dep
 
 It is possible to receive email alerts when an error occurs. Create a file called `.env` in the root directory of `quizbuzz`. It should contain the following lines:
 
-```
+```python
 MAIL_SERVER=smtp.googlemail.com
 MAIL_PORT=587
 MAIL_USE_TLS=1
 MAIL_USERNAME=<your username>
 MAIL_PASSWORD=<your application specific password from gmail>
 MAIL_ADMINS='<your email address>'
+```
+
+The database for users needs to be initialized too by running the commands below.
+
+```bash
+flask db init
+flask db migrate
+flask db upgrade
 ```
 
 ## Usage
